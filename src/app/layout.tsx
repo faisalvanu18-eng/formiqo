@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import Script from "next/script";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { Header } from "@/components/Header";
@@ -90,6 +91,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {siteConfig.adsense.enabled && (
+          <Script
+            id="adsbygoogle-init"
+            async
+            strategy="afterInteractive"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsense.client}`}
+            crossOrigin="anonymous"
+          />
+        )}
         <JsonLd data={websiteJsonLd} />
         <JsonLd data={orgJsonLd} />
         <Suspense fallback={null}>

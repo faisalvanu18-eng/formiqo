@@ -59,10 +59,10 @@ export const siteConfig = {
       { label: "Disclaimer", href: "/disclaimer" },
     ],
   },
-  // AdSense publisher id placeholder — replace before enabling ads.
+  // AdSense publisher id.
   adsense: {
-    enabled: false,
-    client: "ca-pub-0000000000000000",
+    enabled: true,
+    client: "ca-pub-5788775732171838",
   },
 };
 
