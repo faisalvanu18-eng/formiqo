@@ -100,6 +100,22 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
+        {siteConfig.analytics.enabled && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.measurementId}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${siteConfig.analytics.measurementId}');`,
+              }}
+            />
+          </>
+        )}
       </head>
       <body>
         <JsonLd data={websiteJsonLd} />

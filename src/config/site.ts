@@ -64,6 +64,11 @@ export const siteConfig = {
     enabled: true,
     client: "ca-pub-5788775732171838",
   },
+  // Google Analytics 4 Measurement ID.
+  analytics: {
+    enabled: true,
+    measurementId: "G-EXC4JD776E",
+  },
 };
 
 export type SiteConfig = typeof siteConfig;
