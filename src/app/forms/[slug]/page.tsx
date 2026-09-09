@@ -28,19 +28,56 @@ export function generateMetadata({ params }: Params): Metadata {
   if (!form) return {};
   const version = getCurrentVersion(form.versions);
   const title = `${version.label} Documents Required – Photo, Signature & Upload Size`;
-  const description = `Find the documents required for ${version.label}, including photo, signature and upload requirements. Prepare your files and download them ready for submission.`;
+  const description = `Find the documents required for ${version.label}, including photo, signature and upload size (KB/dimensions). Prepare and resize your files ready for submission on the official portal.`;
   const url = `${siteConfig.url}/forms/${form.slug}/`;
+
+  // Per-form keywords built from the form name, short name, aliases and the
+  // document-related search phrases users actually type into Google.
+  const base = form.shortName ?? form.name;
+  const keywords = Array.from(
+    new Set([
+      form.name,
+      form.shortName ?? "",
+      version.label,
+      ...form.aliases,
+      `${base} documents required`,
+      `${base} documents`,
+      `${base} photo size`,
+      `${base} signature size`,
+      `${base} photo and signature size`,
+      `${base} document list`,
+      `${base} apply online documents`,
+      `documents required for ${base}`,
+      form.authority,
+    ].filter(Boolean))
+  );
+
   return {
     title,
     description,
+    keywords,
     alternates: { canonical: `/forms/${form.slug}/` },
     openGraph: {
       title,
       description,
       url,
       type: "article",
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${version.label} documents required`,
+        },
+      ],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [siteConfig.ogImage],
+    },
   };
 }
 
@@ -90,9 +127,51 @@ export default function FormPage({ params }: Params) {
         }
       : null;
 
+  // HowTo structured data — eligible for "How to" rich results in Google and
+  // reinforces the "documents required / how to prepare files" intent.
+  const requiredDocNames = version.requirements
+    .filter((r) => r.necessity !== "optional")
+    .map((r) => r.documentName);
+
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `How to prepare documents for ${version.label}`,
+    description: `Step-by-step guide to the documents required for ${version.label} and how to prepare your photo, signature and files for upload.`,
+    ...(requiredDocNames.length > 0 && {
+      supply: requiredDocNames.map((name) => ({
+        "@type": "HowToSupply",
+        name,
+      })),
+    }),
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "Answer a few questions",
+        text: "Select this form and answer short questions about your category and application type to get a personalized document checklist.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Review your document checklist",
+        text: `Check the documents required for ${version.label}, including any accepted alternatives you can use.`,
+      },
+      {
+        "@type": "HowToStep",
+        name: "Prepare and resize your files",
+        text: "Upload your photo, signature or PDF and let Formiqo resize, crop, compress and convert each file to match the required size and format.",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Download and apply",
+        text: `Download your prepared files and submit your ${version.label} application on the official ${version.authority} portal.`,
+      },
+    ],
+  };
+
   return (
     <>
       <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={howToJsonLd} />
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
 
       <div className="container-page py-8">

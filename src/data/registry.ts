@@ -10,8 +10,11 @@ import { getCurrentVersion } from "../lib/engine";
 import { sscForms } from "./forms/ssc";
 import { rrbForms } from "./forms/rrb";
 import { bankingForms, upscForms } from "./forms/recruitment-extra";
+import { recruitmentMoreForms } from "./forms/recruitment-more";
 import { citizenForms } from "./forms/citizen";
+import { citizenMoreForms } from "./forms/citizen-more";
 import { educationForms } from "./forms/education";
+import { educationMoreForms } from "./forms/education-more";
 
 /** All forms in the system, in a stable order. */
 export const allForms: FormDefinition[] = [
@@ -19,8 +22,11 @@ export const allForms: FormDefinition[] = [
   ...rrbForms,
   ...upscForms,
   ...bankingForms,
+  ...recruitmentMoreForms,
   ...citizenForms,
+  ...citizenMoreForms,
   ...educationForms,
+  ...educationMoreForms,
 ];
 
 export const categoryLabels: Record<FormCategory, string> = {

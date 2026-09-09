@@ -1,20 +1,43 @@
 import type { Metadata } from "next";
 import { FormCard } from "@/components/FormCard";
 import { SearchBox } from "@/components/SearchBox";
-import { getFormsByCategory } from "@/data/registry";
+import { JsonLd } from "@/components/JsonLd";
+import { siteConfig } from "@/config/site";
+import { getFormsByCategory, allForms } from "@/data/registry";
 
 export const metadata: Metadata = {
   title: "All Government Forms & Document Requirements",
   description:
-    "Browse all supported government forms — recruitment exams, citizen services and education. See documents required and prepare your files for upload.",
+    "Browse all supported Indian government forms — recruitment exams (SSC, UPSC, Railway, Banking, Agniveer), citizen services (passport, PAN, Aadhaar, EPF) and education (NEET, JEE, CTET, GATE). See documents required and photo/signature upload size.",
+  keywords: [
+    "government form documents required",
+    "documents required list",
+    "photo signature upload size",
+    "sarkari form documents",
+    "exam photo size",
+    "government exam documents",
+  ],
   alternates: { canonical: "/forms/" },
 };
 
 export default function FormsIndexPage() {
   const categories = getFormsByCategory();
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "All government forms and exams on Formiqo",
+    itemListElement: allForms.map((form, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: form.name,
+      url: `${siteConfig.url}/forms/${form.slug}/`,
+    })),
+  };
+
   return (
     <div className="container-page py-10">
+      <JsonLd data={itemListJsonLd} />
       <header className="max-w-2xl">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           All Forms

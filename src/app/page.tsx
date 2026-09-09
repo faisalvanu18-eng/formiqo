@@ -1,15 +1,40 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SearchBox } from "@/components/SearchBox";
 import { FormCard } from "@/components/FormCard";
+import { JsonLd } from "@/components/JsonLd";
+import { siteConfig } from "@/config/site";
 import { getFormsByCategory, allForms } from "@/data/registry";
 import { CheckIcon, ShieldIcon, UploadIcon, DownloadIcon } from "@/components/icons";
+
+export const metadata: Metadata = {
+  title: "Documents Required for Government Forms — Photo & Signature Size",
+  description:
+    "Find the exact documents, photo and signature upload size for Indian government forms and exams — SSC, UPSC, Railway, Banking, Agniveer, NEET, JEE, passport, PAN, Aadhaar and more. Get a personalized checklist and resize your files free.",
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const categories = getFormsByCategory();
   const popular = allForms.slice(0, 6);
 
+  // ItemList structured data helps Google understand the list of forms the
+  // site covers and can surface them for navigational/list queries.
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Government forms and exams covered by Formiqo",
+    itemListElement: allForms.slice(0, 30).map((form, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: form.name,
+      url: `${siteConfig.url}/forms/${form.slug}/`,
+    })),
+  };
+
   return (
     <>
+      <JsonLd data={itemListJsonLd} />
       {/* Hero */}
       <section className="bg-gradient-to-b from-brand-50/70 to-slate-50">
         <div className="container-page py-14 sm:py-20">
