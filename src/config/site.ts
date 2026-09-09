@@ -10,7 +10,7 @@ export const siteConfig = {
     "Select your government form, get a personalized document checklist, and prepare your files for upload — all in one place.",
   // Production domain. Override at build time with NEXT_PUBLIC_SITE_URL
   // (e.g. on your host) without code changes; falls back to the default.
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.formiqo.com").replace(
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://formiqo.online").replace(
     /\/$/,
     ""
   ),
