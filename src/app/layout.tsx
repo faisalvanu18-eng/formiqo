@@ -54,6 +54,9 @@ export const metadata: Metadata = {
     images: [siteConfig.ogImage],
   },
   robots: { index: true, follow: true },
+  other: siteConfig.adsense.enabled
+    ? { "google-adsense-account": siteConfig.adsense.client }
+    : {},
 };
 
 export const viewport: Viewport = {
