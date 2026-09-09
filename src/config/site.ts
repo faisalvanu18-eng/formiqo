@@ -37,6 +37,7 @@ export const siteConfig = {
     "photo resize compress KB",
   ],
   nav: [
+    { label: "Home", href: "/" },
     { label: "Forms", href: "/forms" },
     { label: "Tools", href: "/tools" },
     { label: "About", href: "/about" },
